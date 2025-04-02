@@ -7,7 +7,7 @@ import callAPI from './callAPI';
 import { handleLoop as handleHostLoop, performStatusUpdate } from "./gameFlow";
 import RoundStatsTable from "./RoundStatsTable";
 import GameSettingsCollector from "./GameSettingsCollector";
-import GameStatsDisplay from "./GameStatsDisplay";
+import { GameStatsDisplay, GameHeaderDisplay } from "./GameStatsDisplay";
 
 
 const POSSIBLE_STATES = {
@@ -215,7 +215,7 @@ function ComponentHost({ startGame, newGameSettings }) {
             {gameState === POSSIBLE_STATES.STARTED && (
                 <div>
                     <p>{t("hostToken")}: {sessionStorage.getItem('authToken')}, {t("gameToken")}: {hostData?.token}</p>
-                    <h2>{t("round")} {gameStatus?.round_number}: {gameStatus?.round_name} </h2>
+                    <GameHeaderDisplay t={t} gameStatus={gameStatus} />
 
                     {gameStatus?.question_state === "running" && (
                         <div>

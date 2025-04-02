@@ -180,7 +180,7 @@ class SIGame(AGame):
         self.nominal_index: int = 0
         self.question_number = 0
         self.current_nominal: int = self.nominals[self.nominal_index]
-        self.current_round = 1
+        self.current_round = 0
         self.allow_multiple_answers = False
         self.game_stats = list()
 
@@ -210,8 +210,8 @@ class SIGame(AGame):
         raw_game_data = game_data["data"]["status"]
 
         self.number_of_rounds = raw_game_data["number_of_rounds"]
-        self.current_nominal = raw_game_data["nominal"]
-        self.current_round = raw_game_data["round_number"]
+        self.current_nominal = raw_game_data["current_nominal"]
+        self.current_round = raw_game_data["current_round"]
         self.game_stats = raw_game_data["game_stats"]
         self.round_name = raw_game_data["round_name"]
         self.round_names = raw_game_data.get("round_names", self.round_names)
@@ -233,7 +233,7 @@ class SIGame(AGame):
 
         self.nominal_index  = self.nominals.index(self.current_nominal)
         self.number_of_question_in_round = self.nominal_index - 1
-        self.question_number = (self.current_round - 1) * number_of_questions_in_round + self.number_of_question_in_round
+        self.question_number = self.current_round  * number_of_questions_in_round + self.number_of_question_in_round
         self.question_state = QuestionState[raw_game_data['question_state']]
 
     def apply_round_names_as_text(self,round_names_as_text):
@@ -271,7 +271,7 @@ class SIGame(AGame):
             players_stat.append(dict(name=p.name, player_id=p.player_id, score=p.score))
         status['players'] = players_stat
         status['number_of_rounds'] = self.number_of_rounds
-        status['nominal'] = self.current_nominal
+        status['current_nominal'] = self.current_nominal
         status['game_state'] = self.game_state
         status['question_state'] = self.question_state.name
         status['responders'] = self.responders
@@ -280,10 +280,10 @@ class SIGame(AGame):
         status["game_stats"] = self.game_stats
         status['game_id'] = self.game_id
         status["game_token"] = self.token
-        status['round_number'] = self.current_round
+        status['current_round'] = self.current_round
         status['nominals'] = self.nominals
         status['number_of_question_in_round'] = self.number_of_question_in_round
-        status['round_name'] = self.round_names[self.current_round - 1] if self.round_names is not None and len(self.round_names) > 0 else None
+        status['round_name'] = 'Finished' if self.current_round >= self.number_of_rounds else self.round_names[self.current_round] if self.round_names is not None and len(self.round_names) > 0 else None
         status['round_names'] = self.round_names
         status['current_round_stats'] = self._generate_current_round_array()
         result = dict(status=status)

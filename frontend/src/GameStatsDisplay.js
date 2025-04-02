@@ -1,4 +1,4 @@
-function GameStatsDisplay({ t, gameStats }) {
+export function GameStatsDisplay({ t, gameStats }) {
     return (
         <div>
             <span>⏳ {t("lag")}: {gameStats?.lag?.toFixed(2)} ms</span>
@@ -7,4 +7,10 @@ function GameStatsDisplay({ t, gameStats }) {
     );
 }
 
-export default GameStatsDisplay;
+export function GameHeaderDisplay({ t, gameStatus }) {
+    return (
+        <h2>{t("round")}: {gameStatus?.current_round + 1}: {gameStatus?.round_name} {t("question")}: {gameStatus?.current_nominal}</h2>
+
+    );
+}
+

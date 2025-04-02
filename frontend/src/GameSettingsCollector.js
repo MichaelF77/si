@@ -12,7 +12,10 @@ function GameSettingsCollector({ t, fireSendUpdatedGameSettings, allowSetRoundNu
         const newSettings = { ...gameSettings, roundNames };
         if (allowSetRoundNumber) {
             const roundNamesSplit = roundNames.split("\n");
-            const numRoundsBasedOnRoundNames = roundNamesSplit.length;
+            let numRoundsBasedOnRoundNames = roundNamesSplit.length;
+            if (roundNamesSplit[roundNamesSplit.length - 1] === "") {
+                numRoundsBasedOnRoundNames -= 1; // Remove empty last line
+            }
             if (numRoundsBasedOnRoundNames > 1 || roundNamesSplit[0] !== "") {
                 newSettings.numRounds = numRoundsBasedOnRoundNames;
             }

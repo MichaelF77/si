@@ -7,7 +7,7 @@ import "./i18n"; // Import i18n initialization
 
 import { handlePlayerLoop, performStatusUpdate } from "./gameFlow";
 import RoundStatsTable from "./RoundStatsTable";
-import GameStatsDisplay from "./GameStatsDisplay";
+import { GameStatsDisplay, GameHeaderDisplay } from "./GameStatsDisplay";
 
 const POSSIBLE_STATES = {
     AUTO_JOIN: 'AUTO_JOIN',
@@ -141,7 +141,7 @@ function ComponentPlayer() {
 
                 {gameState === POSSIBLE_STATES.STARTED && (
                     <div>
-                        <h2>{t("round")}: {gameStatus?.round_number}: {gameStatus?.round_name} {t("question")}: {gameStatus?.currentNominal}</h2>
+                        <GameHeaderDisplay t={t} gameStatus={gameStatus} />
                         {gameStatus?.question_state === "fake" && (
                             <div>
                                 <p>Game Status: {JSON.stringify(gameStatus)}</p>

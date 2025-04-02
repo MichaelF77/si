@@ -1,5 +1,7 @@
 import uuid
 
+import urllib
+
 from backend.api.generic_data_provider import GenericDataProvider
 from backend.api.generic_validator import validate_record_for_mandatory_fields
 
@@ -49,12 +51,14 @@ class UserDataProvider:
         if player_token is not None and player_token.startswith("transient_"):
             # split the token to get the game id
             token_split = player_token.split("_")
+            player_name_encoded = token_split[2]
             if not 'game_id' in player_data:
                 player_data["game_id"] = token_split[1]
             if not 'name' in player_data:
-                player_data["name"] = token_split[2]
+                name = urllib.parse.unquote(player_name_encoded)
+                player_data["name"] = name
             if not 'player_id' in player_data:
-                player_data["player_id"] = player_data["game_id"] + '_' + player_data["name"]
+                player_data["player_id"] = player_data["game_id"] + '_' + player_name_encoded
             player_data['token'] = player_token
             return player_data
 
